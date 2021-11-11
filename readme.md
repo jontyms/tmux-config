@@ -101,7 +101,7 @@ So `~/.tmux.conf` overrides default key bindings for many action, to make them m
 
 Let's go through them. 
 
-If you are an iTerm2 user, third column describes the keybinding of similar  "action" in iTerm2. It's possible to reuse very same keys you already get used to and tell iTerm2 to execute analogous tmux actions. See [iTerm2 and tmux integration](#iterm2-and-tmux-integration) section below.
+
 
 <table>
     <tr>
@@ -431,46 +431,3 @@ color_window_off_status_current_bg="colour254"
 Note, that variables are not extracted to dedicated file, as it should be, because for some reasons, tmux does not see variable values after sourcing `theme.conf` file. Don't know why.
 
 
-iTerm2 and tmux integration
----------------------------
-
-If you're an iTerm use same to me, most likely you already have a muscle memory for most common actions and keybindings (split pane, focus pane, fullscreen pane, move between tabs, create new tab, etc). When I switched to tmux, I found new key table more difficult: more keys to type, don't forget to enter `prefix` and recall if you've already pressed it or not (compare `C-a, c` with "⌘T", or `C-a ->` with "⌘⌥->"). iTerm2 keybinding was so natural to me, so I decided to remap most common keybindings to tell iTerm2 to execute corresponding tmux actions.
-
-You can setup new profile in iTerm preferences to override default keybindings, to tell iTerm to send pre-configured sequences of keys, that will trigger corresponding action in tmux.
-
-![iterm preferences](https://user-images.githubusercontent.com/768858/33185301-54afc402-d08a-11e7-9622-232a4607df8b.png)
-
-For example, when "^⌘↑" pressed, sequence of bytes `0x01 0x1b 0x5b 0x31 0x3b 0x35 0x41` are sent through terminal to running tmux instance, that interprets them as `C-a C-↑` keybinding and triggers `resize-pane -U` according to our `.tmux.conf` configuration.
-
-You can get binary representation of any keys, using `showkey` or `od` commands
-
-```
-$od -t x1
-
-^A^[[1;5A   // press C-a C-↑ on your keyboard
-0000000 01 1b 5b 31 3b 35 41
-0000007
-```
-
-```
-$ showkey -a
-Press any keys - Ctrl-D will terminate this program
-
-^A        1 0001 0x01
-^[[1;5A  27 0033 0x1b
-         91 0133 0x5b
-         49 0061 0x31
-         59 0073 0x3b
-         53 0065 0x35
-         65 0101 0x41
-```
-
-You can remap whatever key in this way, but I do this only for those ones, which have similar analogous action in tmux and are most common(resize pane, zoom pane, create new window, etc). See table with keybindings above.
-
-As additional step, you can setup this new iTerm profile as default one, and tell it to jump into tmux session right off the start.
-
-![iterm tmux default profile](https://user-images.githubusercontent.com/768858/33185302-54d36b78-d08a-11e7-96b9-7ab3069fc369.png)
-
-You can then go full screen in iTerm, so iTerm tabs and frame do not distract you (anyway now you're using iTerm just as a tunnel to your tmux, everything else happens inside tmux).
-
-![full screen mode](https://user-images.githubusercontent.com/768858/33185303-54fa0378-d08a-11e7-8fd3-068f0af712c7.png)
